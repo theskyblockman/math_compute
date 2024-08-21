@@ -2,10 +2,8 @@ import 'package:math_compute/src/computation.dart';
 import 'package:math_compute/src/errors.dart';
 import 'package:rational/rational.dart';
 
-import '../constants.dart';
 import '../context.dart';
 import '../lexing.dart';
-import 'constant.dart';
 
 class NumberTokenType extends SimpleBanListValidator {
   const NumberTokenType()
@@ -34,10 +32,6 @@ class NumberTokenType extends SimpleBanListValidator {
           rawValue: rawValue,
           globalOffset: globalOffset);
     } on FormatException catch (_) {
-      if (rawValue == 'e' || rawValue == '𝑒') {
-        return ConstantToken(e, type: ConstantTokenType(), rawValue: rawValue);
-      }
-
       throw ComputationError(ComputationStep.lexing,
           message: 'Number meaning ambiguous', globalPosition: globalOffset);
     }
