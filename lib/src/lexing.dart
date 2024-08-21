@@ -1,7 +1,8 @@
+import 'dart:collection';
+
 import 'package:logging/logging.dart';
+import 'package:math_compute/base.dart';
 import 'package:math_compute/src/computable.dart';
-import 'package:math_compute/src/computation.dart';
-import 'package:math_compute/src/context.dart';
 
 final _log = Logger('Lexer');
 
@@ -173,62 +174,74 @@ class SimpleTokenType extends SimpleBanListValidator with SimpleTokenCreator {
 
 List<Token> separateTokens(String input,
     {ComputeContext context = const DefaultComputeContext()}) {
-  int lastModeUpdate = 0;
+  int lastTokenSeparation = 0;
   int pos = 0;
 
-  List<Token> tokens = [];
-  TokenType? currentTokenType;
   input = input.replaceAll(' ', '');
+
+  List<Token> tokens = [];
+
   while (pos < input.length) {
-    final buildingToken = input.substring(lastModeUpdate, pos + 1);
-    _log.finest('Building Token $buildingToken');
+    LinkedHashMap<TokenType, int> lengthPerToken = LinkedHashMap();
+    for (TokenType type in context.registeredTokens) {
+      pos = lastTokenSeparation;
+      while (true) {
+        final buildingToken = input.substring(lastTokenSeparation, pos + 1);
 
-    final TokenType? possiblePreviousTokenType =
-        tokens.isEmpty ? null : tokens.last.type;
+        final doesValidate = type.validateType(context,
+            tokens.lastOrNull?.type ?? NoTokenType(), buildingToken, null);
 
-    // Predict potential next token
-    final String nextCharacter = (pos + 1 < input.length) ? input[pos + 1] : '';
-    TokenType? predictedNextTokenType;
-    for (var tokenType in context.registeredTokens) {
-      if (tokenType.validate(context, null, nextCharacter, null)) {
-        predictedNextTokenType = tokenType;
-        break;
-      }
-    }
-
-    _log.finest('Possible Previous ${possiblePreviousTokenType.runtimeType}');
-    _log.finest('Predicting ${predictedNextTokenType.runtimeType}');
-
-    if (currentTokenType == null) {
-      // Find a matching token type
-      for (var tokenType in context.registeredTokens) {
-        if (tokenType.validateType(context, possiblePreviousTokenType,
-            buildingToken, predictedNextTokenType)) {
-          currentTokenType = tokenType;
+        if (!type.isMultiChar || pos == input.length - 1) {
+          if (doesValidate) {
+            lengthPerToken[type] = buildingToken.length;
+          } else {
+            lengthPerToken[type] = buildingToken.length - 1;
+          }
           break;
         }
-      }
-    } else {
-      // Check if the current type still matches
-      if (!currentTokenType.validateType(context, possiblePreviousTokenType,
-          buildingToken, predictedNextTokenType)) {
-        final createdToken = currentTokenType.createToken(
-            context, input.substring(lastModeUpdate, pos), lastModeUpdate);
-        tokens.add(createdToken);
 
-        currentTokenType = null;
-        lastModeUpdate = pos;
-        pos--;
+        if (!doesValidate) {
+          lengthPerToken[type] = buildingToken.length - 1;
+          break;
+        }
+
+        pos++;
       }
     }
 
-    pos++;
-  }
+    final longest = lengthPerToken.entries.toList()
+      ..removeWhere((element) => element.value == 0)
+      ..sort((a, b) => b.value.compareTo(a.value));
 
-  if (currentTokenType != null) {
-    final createdToken = currentTokenType.createToken(
-        context, input.substring(lastModeUpdate, pos), lastModeUpdate);
-    tokens.add(createdToken);
+    if (lengthPerToken.isEmpty) {
+      throw ComputationError(ComputationStep.lexing,
+          message: 'No tokens registered in context?');
+    }
+
+    while (true) {
+      if (longest.isEmpty) {
+        throw ComputationError(ComputationStep.lexing,
+            message: 'No matching token found',
+            globalPosition: lastTokenSeparation);
+      }
+
+      final currentLongest = longest.first;
+      final buildingToken = input.substring(
+          lastTokenSeparation, lastTokenSeparation + currentLongest.value);
+
+      if (currentLongest.key.validate(
+          context, tokens.lastOrNull ?? NoToken(), buildingToken, null)) {
+        tokens.add(currentLongest.key
+            .createToken(context, buildingToken, lastTokenSeparation));
+        lastTokenSeparation = lastTokenSeparation + currentLongest.value;
+        pos = lastTokenSeparation;
+        break;
+      } else {
+        _log.finest(
+            'Candidate deleted ${currentLongest.key.runtimeType.toString()}');
+        longest.remove(currentLongest);
+      }
+    }
   }
 
   return tokens;

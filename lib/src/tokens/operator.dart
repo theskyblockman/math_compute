@@ -23,8 +23,9 @@ class OperatorTokenType extends SimpleBanListValidator {
       return false;
     }
 
-    return nextToken is OperatorToken &&
-        nextToken.operator.precedence == Precedence.additive;
+    return nextToken == null ||
+        (nextToken is OperatorToken &&
+            nextToken.operator.precedence == Precedence.additive);
   }
 
   @override

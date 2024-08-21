@@ -111,7 +111,7 @@ class DefaultComputeContext implements ComputeContext {
   @override
 
   /// Based off of [Rational] (edited)
-  RegExp get numberChecker => RegExp(r'^\d*\.?\d*([eE][+-]?\d*)?$');
+  RegExp get numberChecker => RegExp(r'^\d+\.?\d*([eE][+-]?\d*)?$');
 
   @override
   RegExp get letterChecker => RegExp(r'^[a-zA-Z]+$');

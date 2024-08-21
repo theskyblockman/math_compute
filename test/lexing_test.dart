@@ -70,6 +70,7 @@ void main() {
         final separatedTokens = separateTokens(raw);
         print(
             "Token types: ${separatedTokens.map((e) => e.type.runtimeType.toString()).join('; ')}");
+        print("Tokens: ${separatedTokens.map((e) => e.rawValue).join(' ')}");
         expect(separatedTokens.map((e) => e.rawValue), tokens);
       });
     }
