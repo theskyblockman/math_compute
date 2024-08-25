@@ -1,5 +1,5 @@
 name: math_compute
-version: 1.0.0
+version: 0.0.1
 description: A library to lex, parse and compute mathematical expressions.
 
 repository: 'https://github.com/theskyblockman/math_compute'
