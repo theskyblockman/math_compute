@@ -19,12 +19,6 @@ import 'tokens/modifier.dart';
 
 abstract class ComputeContext {
   /// A list of operators, defaults to basic operators (plus, minus, etc.)
-  List<Operator> get registeredOperators;
-
-  /// A list of modifiers, defaults to basic modifiers (factorials, plus,
-  /// minus etc.)
-  List<Modifier> get registeredModifiers;
-
   /// A list of token types, defaults to basic token types (numbers, operators,
   /// brackets, etc.)
   ///
@@ -32,20 +26,42 @@ abstract class ComputeContext {
   /// priority**
   List<TokenType> get registeredTokens;
 
-  List<MathFunction> get registeredFunctions;
+  List<Operator> get registeredOperators;
 
   List<Constant> get registeredConstants;
 
-  /// Needed to check if a char can be part of a number (defaults to digits
-  /// and ".")
+  List<MathFunction> get registeredFunctions;
+
+  /// A list of modifiers, defaults to basic modifiers (factorials, plus,
+  /// minus etc.)
+  List<Modifier> get registeredModifiers;
+
+  /// Needed to check if a char can be part of a number (defaults to digits,
+  /// "." and exponents.)
   RegExp get numberChecker;
 
   /// Needed to check if a char can be part of a call (defaults to the
-  /// latin alphabet)
+  /// latin alphabet.)
   RegExp get letterChecker;
+
+  /// When using functions asking for angles, automatically convert the degrees
+  /// to radians to compute them.
+  bool get convertDegreesToRadians;
 }
 
 class DefaultComputeContext implements ComputeContext {
+  @override
+  List<TokenType> get registeredTokens => [
+        NumberTokenType(),
+        ModifierTokenType(),
+        OperatorTokenType(),
+        ConstantTokenType(),
+        FunctionTokenType(),
+        OpeningBracket(),
+        ClosingBracket(),
+        Comma()
+      ];
+
   @override
   List<Operator> get registeredOperators => [
         PlusOperator(),
@@ -59,20 +75,7 @@ class DefaultComputeContext implements ComputeContext {
       ];
 
   @override
-  List<Modifier> get registeredModifiers =>
-      [FactorialModifier(), PercentageModifier()];
-
-  @override
-  List<TokenType> get registeredTokens => [
-        NumberTokenType(),
-        ModifierTokenType(),
-        OperatorTokenType(),
-        ConstantTokenType(),
-        FunctionTokenType(),
-        OpeningBracket(),
-        ClosingBracket(),
-        Comma()
-      ];
+  List<Constant> get registeredConstants => [pi, altPi, i, e];
 
   @override
   List<MathFunction> get registeredFunctions => [
@@ -106,15 +109,17 @@ class DefaultComputeContext implements ComputeContext {
       ];
 
   @override
-  List<Constant> get registeredConstants => [pi, altPi, i, e];
+  List<Modifier> get registeredModifiers => [factorial, percentage];
 
+  /// Based off of [Rational]'s parsing regex (edited)
   @override
-
-  /// Based off of [Rational] (edited)
   RegExp get numberChecker => RegExp(r'^\d+\.?\d*([eE][+-]?\d*)?$');
 
   @override
   RegExp get letterChecker => RegExp(r'^[a-zA-Z]+$');
 
-  const DefaultComputeContext();
+  @override
+  final bool convertDegreesToRadians;
+
+  const DefaultComputeContext({this.convertDegreesToRadians = true});
 }

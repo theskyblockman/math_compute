@@ -12,7 +12,7 @@ class ModifierTokenType extends SimpleBanListValidator {
             bannedTrailingSelf: true);
 
   @override
-  bool get isMultiChar => false;
+  bool get isMultiChar => true;
 
   Modifier? _getModifier(ComputeContext ctx, String rawBuildingToken) {
     return ctx.registeredModifiers.cast<Modifier?>().firstWhere(
@@ -68,6 +68,7 @@ class ModifierToken extends Token<ModifierTokenType> {
       required super.type,
       required super.rawValue,
       super.globalOffset});
+
   final Modifier modifier;
 
   @override

@@ -1,7 +1,7 @@
 import 'package:math_compute/src/computation.dart';
 import 'package:rational/rational.dart';
 
-Rational factorial(Rational n) {
+Rational _factorial(Rational n) {
   var prod = Rational.one;
   for (var i = 1; i.toRational() <= n; i++) {
     prod *= i.toRational();
@@ -11,6 +11,8 @@ Rational factorial(Rational n) {
 }
 
 abstract class Modifier {
+  const Modifier();
+
   Result modify(Result input);
 
   Result modifyOnAdditiveOperation(Result current, Result other) => current;
@@ -22,22 +24,26 @@ abstract class Modifier {
   Type? get requiredAfter => null;
 }
 
+const factorial = FactorialModifier();
+
 class FactorialModifier extends Modifier {
-  FactorialModifier();
+  const FactorialModifier();
 
   @override
   Result modify(Result input) {
     return Result(
         dirtyParts: {},
-        clean: factorial(Rational.parse(input.approximate().toString())));
+        clean: _factorial(Rational.parse(input.approximate().toString())));
   }
 
   @override
   String get visualSign => '!';
 }
 
+const percentage = PercentageModifier();
+
 class PercentageModifier extends Modifier {
-  PercentageModifier();
+  const PercentageModifier();
 
   @override
   Result modify(Result input) {

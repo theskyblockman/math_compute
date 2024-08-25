@@ -1,5 +1,7 @@
 import 'package:math_compute/src/computation.dart';
 import 'package:math_compute/src/context.dart';
+import 'package:math_compute/src/errors.dart';
+import 'package:rational/rational.dart';
 
 import 'math_compute_base.dart';
 
@@ -74,8 +76,14 @@ class AltMultiplicationOperator extends MultiplicationOperator {
 
 class DivisionOperator extends Operator {
   @override
-  Result compute(ComputeContext context, Result leftHand, Result rightHand) =>
-      leftHand / rightHand;
+  Result compute(ComputeContext context, Result leftHand, Result rightHand) {
+    if (rightHand.approximate() == Rational.zero) {
+      throw ComputationError(ComputationStep.eval,
+          message: 'Cannot divide by zero');
+    }
+
+    return leftHand / rightHand;
+  }
 
   @override
   Precedence get precedence => Precedence.multiplicative;

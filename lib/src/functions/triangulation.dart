@@ -7,6 +7,18 @@ import 'package:rational/rational.dart';
 
 import '../functions.dart';
 
+double _convertDegreesToRadians(ComputeContext ctx, Result input) {
+  if (!ctx.convertDegreesToRadians) return input.approximate().toDouble();
+
+  return degreesToRadians(input);
+}
+
+double degreesToRadians(Result input) {
+  return (input.approximate() *
+          (Rational.parse(math.pi.toString()) / Rational(BigInt.from(180))))
+      .toDouble();
+}
+
 class _Sinus extends MathFunction {
   const _Sinus(this.name);
 
@@ -15,8 +27,9 @@ class _Sinus extends MathFunction {
 
   @override
   Result compute(ComputeContext ctx, List<Result> input) => Result(
-      clean: Rational.parse(
-          internal_math.sin(input.single.approximate().toDouble()).toString()));
+      clean: Rational.parse(internal_math
+          .sin(_convertDegreesToRadians(ctx, input.single))
+          .toString()));
 
   @override
   int get requiredParameterCount => 1;
@@ -33,7 +46,7 @@ class _ArcSinus extends MathFunction {
   @override
   Result compute(ComputeContext ctx, List<Result> input) => Result(
       clean: Rational.parse(
-          math.asin(input.single.approximate().toDouble()).toString()));
+          math.asin(_convertDegreesToRadians(ctx, input.single)).toString()));
 
   @override
   int get requiredParameterCount => 1;
@@ -51,8 +64,9 @@ class _Cosinus extends MathFunction {
 
   @override
   Result compute(ComputeContext ctx, List<Result> input) => Result(
-      clean: Rational.parse(
-          internal_math.cos(input.single.approximate().toDouble()).toString()));
+      clean: Rational.parse(internal_math
+          .cos(_convertDegreesToRadians(ctx, input.single))
+          .toString()));
 
   @override
   int get requiredParameterCount => 1;
@@ -69,7 +83,7 @@ class _ArcCosinus extends MathFunction {
   @override
   Result compute(ComputeContext ctx, List<Result> input) => Result(
       clean: Rational.parse(
-          math.acos(input.single.approximate().toDouble()).toString()));
+          math.acos(_convertDegreesToRadians(ctx, input.single)).toString()));
 
   @override
   int get requiredParameterCount => 1;
@@ -87,8 +101,9 @@ class _Tangent extends MathFunction {
 
   @override
   Result compute(ComputeContext ctx, List<Result> input) => Result(
-      clean: Rational.parse(
-          internal_math.tan(input.single.approximate().toDouble()).toString()));
+      clean: Rational.parse(internal_math
+          .tan(_convertDegreesToRadians(ctx, input.single))
+          .toString()));
 
   @override
   int get requiredParameterCount => 1;
@@ -105,7 +120,7 @@ class _ArcTangent extends MathFunction {
   @override
   Result compute(ComputeContext ctx, List<Result> input) => Result(
       clean: Rational.parse(
-          math.atan(input.single.approximate().toDouble()).toString()));
+          math.atan(_convertDegreesToRadians(ctx, input.single)).toString()));
 
   @override
   int get requiredParameterCount => 1;
