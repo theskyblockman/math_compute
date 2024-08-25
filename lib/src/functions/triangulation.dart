@@ -12,6 +12,7 @@ double _convertDegreesToRadians(ComputeContext ctx, Result input) {
   return degreesToRadians(input);
 }
 
+/// Converts the [input] into radians.
 double degreesToRadians(Result input) {
   return (input.approximate() *
           (Rational.parse(math.pi.toString()) / Rational(BigInt.from(180))))
@@ -34,6 +35,7 @@ class _Sinus extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the sine of a number.
 const sin = _Sinus('sin');
 
 class _ArcSinus extends MathFunction {
@@ -51,8 +53,13 @@ class _ArcSinus extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the arc sine of a number when written as "arcsin".
 const arcsin = _ArcSinus('arcsin');
+
+/// Takes the arc sine of a number when written as "asin".
 const asin = _ArcSinus('asin');
+
+/// Takes the arc sine of a number when written as "asn".
 const asn = _ArcSinus('asn');
 
 class _Cosinus extends MathFunction {
@@ -71,6 +78,7 @@ class _Cosinus extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the cosine of a number.
 const cos = _Cosinus('cos');
 
 class _ArcCosinus extends MathFunction {
@@ -88,8 +96,13 @@ class _ArcCosinus extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the arc cosine of a number when written as "arccos".
 const arccos = _ArcCosinus('arccos');
+
+/// Takes the arc cosine of a number when written as "acos".
 const acos = _ArcCosinus('acos');
+
+/// Takes the arc cosine of a number when written as "acs".
 const acs = _ArcCosinus('acs');
 
 class _Tangent extends MathFunction {
@@ -108,6 +121,7 @@ class _Tangent extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the tangent of a number.
 const tan = _Tangent('tan');
 
 class _ArcTangent extends MathFunction {
@@ -125,5 +139,8 @@ class _ArcTangent extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the arc tangent of a number when written as "arctan".
 const arctan = _ArcTangent('arctan');
+
+/// Takes the arc tangent of a number when written as "atan".
 const atan = _ArcTangent('atan');

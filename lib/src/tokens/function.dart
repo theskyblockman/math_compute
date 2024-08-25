@@ -3,7 +3,9 @@ import 'package:math_compute/src/errors.dart';
 import 'package:math_compute/src/functions.dart';
 import 'package:math_compute/src/lexing.dart';
 
+/// The token type for functions.
 class FunctionTokenType extends SimpleBanListValidator {
+  /// Creates the token type.
   const FunctionTokenType()
       : super(
             bannedLeadingTokenTypes: const [],
@@ -27,7 +29,9 @@ class FunctionTokenType extends SimpleBanListValidator {
   }
 }
 
+/// A token for functions.
 class FunctionToken extends Token<FunctionTokenType> {
+  /// Creates the token.
   FunctionToken(ComputeContext context,
       {required super.type, required super.rawValue, super.globalOffset}) {
     for (final f in context.registeredFunctions) {
@@ -41,6 +45,7 @@ class FunctionToken extends Token<FunctionTokenType> {
         message: 'Unknown function "$rawValue"', globalPosition: globalOffset);
   }
 
+  /// The held function.
   late final MathFunction function;
 
   @override

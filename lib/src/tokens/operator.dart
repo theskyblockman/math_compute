@@ -3,7 +3,9 @@ import 'package:math_compute/src/lexing.dart';
 import 'package:math_compute/src/math_compute_base.dart';
 import 'package:math_compute/src/operators.dart';
 
+/// The token type for operators.
 class OperatorTokenType extends SimpleBanListValidator {
+  /// Creates the token type.
   const OperatorTokenType()
       : super(
             bannedTrailingTokenTypes: const [],
@@ -37,7 +39,9 @@ class OperatorTokenType extends SimpleBanListValidator {
   }
 }
 
+/// A token for operators.
 class OperatorToken extends Token<OperatorTokenType> {
+  /// Creates the token.
   OperatorToken(ComputeContext context,
       {required super.type, required super.rawValue, super.globalOffset}) {
     for (final op in context.registeredOperators) {
@@ -48,6 +52,7 @@ class OperatorToken extends Token<OperatorTokenType> {
     }
   }
 
+  /// The held operator.
   late final Operator operator;
 
   @override

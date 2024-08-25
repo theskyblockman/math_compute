@@ -3,7 +3,9 @@ import 'package:math_compute/src/context.dart';
 import 'package:math_compute/src/lexing.dart';
 import 'package:math_compute/src/modifiers.dart';
 
+/// The token type for modifiers.
 class ModifierTokenType extends SimpleBanListValidator {
+  /// Creates the token type.
   const ModifierTokenType()
       : super(
             bannedTrailingTokenTypes: const [],
@@ -62,13 +64,16 @@ class ModifierTokenType extends SimpleBanListValidator {
   }
 }
 
+/// A token for modifiers.
 class ModifierToken extends Token<ModifierTokenType> {
+  /// Creates the token.
   ModifierToken(
       {required this.modifier,
       required super.type,
       required super.rawValue,
       super.globalOffset});
 
+  /// The held modifier.
   final Modifier modifier;
 
   @override

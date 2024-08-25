@@ -20,4 +20,5 @@ class _Exponential extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the exponential of a number.
 const exp = _Exponential();

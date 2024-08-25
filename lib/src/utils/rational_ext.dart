@@ -16,6 +16,8 @@ import 'package:rational/rational.dart';
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 extension RationalExt on Rational {
+  /// Checks if the fraction can be translated exactly to a floating point
+  /// number.
   bool get hasFinitePrecision {
     // the denominator should only be a product of powers of 2 and 5
     var den = denominator;

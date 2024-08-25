@@ -21,6 +21,7 @@ class _Min extends MathFunction {
   int get requiredParameterCount => 2;
 }
 
+/// Takes the smallest of two numbers.
 const min = _Min();
 
 class _Max extends MathFunction {
@@ -42,4 +43,5 @@ class _Max extends MathFunction {
   int get requiredParameterCount => 2;
 }
 
+/// Takes the largest of two numbers.
 const max = _Max();

@@ -21,7 +21,10 @@ class _Sqrt extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the square root of a number when written as "sqrt.
 const sqrt = _Sqrt('sqrt');
+
+/// Takes the square root of a number when written as "√".
 const sqrtAlt = _Sqrt('√');
 
 class _CubeRoot extends MathFunction {
@@ -42,5 +45,8 @@ class _CubeRoot extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the cube root of a number when written as "cbrt".
 const cubeRoot = _CubeRoot('cbrt');
+
+/// Takes the cube root of a number when written as "∛".
 const cubeRootAlt = _CubeRoot('∛');

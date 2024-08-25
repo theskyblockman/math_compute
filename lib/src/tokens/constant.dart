@@ -3,7 +3,9 @@ import 'package:math_compute/src/constants.dart';
 import 'package:math_compute/src/context.dart';
 import 'package:math_compute/src/lexing.dart';
 
+/// The token type for constants.
 class ConstantTokenType extends SimpleBanListValidator {
+  /// Creates the token type.
   const ConstantTokenType()
       : super(
             bannedLeadingTokenTypes: const [],
@@ -30,10 +32,13 @@ class ConstantTokenType extends SimpleBanListValidator {
   }
 }
 
+/// A token for constants.
 class ConstantToken extends Token<ConstantTokenType> {
+  /// Creates the token.
   ConstantToken(this.constant,
       {required super.type, required super.rawValue, super.globalOffset});
 
+  /// The held constant.
   final Constant constant;
 
   @override

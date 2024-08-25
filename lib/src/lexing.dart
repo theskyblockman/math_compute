@@ -6,11 +6,18 @@ import 'package:math_compute/src/computable.dart';
 
 final _log = Logger('Lexer');
 
+/// A token, a chain of characters representing a value to manage.
 class Token<T extends TokenType> implements Computable {
+  /// The type of the token.
   final T type;
+
+  /// The raw value of the token.
   final String rawValue;
+
+  /// Where the token is located.
   final int globalOffset;
 
+  /// Creates the token.
   const Token(
       {required this.type, required this.rawValue, this.globalOffset = -1});
 
@@ -25,7 +32,9 @@ class Token<T extends TokenType> implements Computable {
   }
 }
 
+/// A placeholder token type for when there are no tokens.
 class NoTokenType extends TokenType {
+  /// Creates the placeholder.
   const NoTokenType();
 
   @override
@@ -58,43 +67,63 @@ class NoTokenType extends TokenType {
       throw UnimplementedError();
 }
 
+/// A placeholder token for when there are no tokens.
 class NoToken extends Token {
+  /// Creates the placeholder.
   const NoToken() : super(type: const NoTokenType(), rawValue: "");
 }
 
+/// A type of token, it is used to know exactly when to create the token.
 abstract class TokenType {
+  /// Signals the caller if the token type is compatible with the next type of
+  /// token.
   bool validateNextType(
       ComputeContext ctx, String rawBuildingToken, TokenType? nextTokenType);
 
+  /// Signals the caller if the token type is compatible with the next token.
   bool validateNext(
       ComputeContext ctx, String rawBuildingToken, Token? nextToken);
 
+  /// Signals the caller is the token type is compatible with the previous type
+  /// of token.
   bool validatePreviousType(ComputeContext ctx, String rawBuildingToken,
       TokenType? previousTokenType);
 
+  /// Signals the caller if the token type is compatible with the previous
+  /// token.
   bool validatePrevious(
       ComputeContext ctx, String rawBuildingToken, Token? previousToken);
 
+  /// Signals the caller if the token type is compatible with the next and
+  /// previous types of tokens.
   bool validateType(ComputeContext ctx, TokenType? previousTokenType,
       String rawBuildingToken, TokenType? nextTokenType) {
     return validatePreviousType(ctx, rawBuildingToken, previousTokenType) &&
         validateNextType(ctx, rawBuildingToken, nextTokenType);
   }
 
+  /// Signals the caller if the token type is compatible with the next and
+  /// previous tokens.
   bool validate(ComputeContext ctx, Token? previousToken,
       String rawBuildingToken, Token? nextToken) {
     return validatePrevious(ctx, rawBuildingToken, previousToken) &&
         validateNext(ctx, rawBuildingToken, nextToken);
   }
 
+  /// Can the token be composed of multiple characters.
   bool get isMultiChar;
 
+  /// Creates the token.
   Token createToken(ComputeContext ctx, String rawValue, int globalOffset);
 
+  /// Creates the token type.
   const TokenType();
 }
 
+/// A helper class used to have a list of banned token types before and after
+/// it among other things.
 abstract class SimpleBanListValidator extends TokenType {
+  /// Creates the validator.
   const SimpleBanListValidator({
     required this.bannedLeadingTokenTypes,
     this.bannedLeadingSelf = false,
@@ -102,16 +131,25 @@ abstract class SimpleBanListValidator extends TokenType {
     this.bannedTrailingSelf = false,
   });
 
+  /// A list containing all the banned token types before it.
   final List<TokenType> bannedLeadingTokenTypes;
+
+  /// Can the leading token be the same as this.
   final bool bannedLeadingSelf;
 
+  /// Can the leading token be null.
   bool get leadingCanBeNull => true;
 
+  /// A list containing all the banned token types after it.
   final List<TokenType> bannedTrailingTokenTypes;
 
-  bool get trailingCanBeNull => true;
+  /// Can the trailing token be the same as this.
   final bool bannedTrailingSelf;
 
+  /// Cab the trailing token be null.
+  bool get trailingCanBeNull => true;
+
+  /// An external additional factor,
   bool additionalFactor(ComputeContext ctx, String rawBuildingToken) => true;
 
   @override
@@ -143,6 +181,7 @@ abstract class SimpleBanListValidator extends TokenType {
       validatePreviousType(ctx, rawBuildingToken, previousToken?.type);
 }
 
+/// A helper mixing to create simple tokens which cannot be computed
 mixin SimpleTokenCreator on TokenType {
   @override
   Token<TokenType> createToken(
@@ -153,16 +192,19 @@ mixin SimpleTokenCreator on TokenType {
 
 /// Helper class to create simple tokens which cannot be computed
 class SimpleTokenType extends SimpleBanListValidator with SimpleTokenCreator {
+  /// Creates the token type.
   const SimpleTokenType(this.charToMatchAgainst,
       {required this.canBeFinal, required this.isMultiChar})
       : super(
             bannedLeadingTokenTypes: const [],
             bannedTrailingTokenTypes: const []);
 
+  /// Can the token be the last one to be created.
   final bool canBeFinal;
   @override
   final bool isMultiChar;
 
+  /// The character to match against.
   final String charToMatchAgainst;
 
   @override
@@ -172,6 +214,7 @@ class SimpleTokenType extends SimpleBanListValidator with SimpleTokenCreator {
   }
 }
 
+/// Does a lexical analysis by splitting the input into tokens.
 List<Token> separateTokens(String input,
     {ComputeContext context = const DefaultComputeContext()}) {
   int lastTokenSeparation = 0;

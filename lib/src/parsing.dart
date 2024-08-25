@@ -92,7 +92,10 @@ List<Token> _explicitMultiplications(ComputeContext ctx, List<Token> tokens) {
   return processed;
 }
 
-// Based off of https://en.wikipedia.org/wiki/Shunting_yard_algorithm#The_algorithm_in_detail
+/// An implementation of the Shunting-yard algorithm to turn the expression into
+/// reverse polish notation.
+///
+/// Based off of https://en.wikipedia.org/wiki/Shunting_yard_algorithm#The_algorithm_in_detail
 List<Token> toRPN(List<Token> tokens,
     {ComputeContext context = const DefaultComputeContext()}) {
   List<Token> operatorStack = [];
@@ -183,6 +186,7 @@ List<Token> toRPN(List<Token> tokens,
   return outputQueue;
 }
 
+/// Collapses the RPN into a tree of computable expressions.
 Computable rpnToComputable(List<Token> tokens,
     {ComputeContext context = const DefaultComputeContext()}) {
   if (tokens.isEmpty) {

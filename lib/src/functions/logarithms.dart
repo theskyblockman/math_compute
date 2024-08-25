@@ -21,6 +21,7 @@ class _NaturalLogarithm extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the natural logarithm of a number.
 const ln = _NaturalLogarithm('ln');
 
 class _DecimalLogarithm extends MathFunction {
@@ -39,6 +40,7 @@ class _DecimalLogarithm extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the decimal logarithm of a number.
 const log = _DecimalLogarithm('log');
 
 class _BinaryLogarithm extends MathFunction {
@@ -57,5 +59,8 @@ class _BinaryLogarithm extends MathFunction {
   int get requiredParameterCount => 1;
 }
 
+/// Takes the binary logarithm of a number when written as "log2".
 const log2 = _BinaryLogarithm('log2');
+
+/// Takes the binary logarithm of a number when written as "lb".
 const lb = _BinaryLogarithm('lb');

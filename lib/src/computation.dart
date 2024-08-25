@@ -7,25 +7,35 @@ import 'package:math_compute/src/parsing.dart';
 import 'package:math_compute/src/utils/rational_ext.dart';
 import 'package:rational/rational.dart';
 
+/// Represents a real number and its imaginary parts.
 class Result implements Computable {
+  /// The clean, real value.
   late final Rational clean;
+
+  /// The imaginary parts.
   final Map<ImaginaryValue, num> dirtyParts;
+
+  /// The modifier, this is only kept to help the other operators.
   final Modifier? modifier;
 
+  /// Creates the result.
   Result({Rational? clean, this.dirtyParts = const {}, this.modifier}) {
     this.clean = clean ?? Rational.zero;
   }
 
+  /// The result of zero.
   Result.zero()
       : clean = Rational.zero,
         dirtyParts = const {},
         modifier = null;
 
+  /// The result of one.
   Result.one()
       : clean = Rational.one,
         dirtyParts = const {},
         modifier = null;
 
+  /// Creates a copy of the result with edits.
   Result copyWith(
       {Rational? clean,
       Map<ImaginaryValue, num>? dirtyParts,
@@ -54,6 +64,7 @@ class Result implements Computable {
     return newDirtyParts;
   }
 
+  /// Adds two results together.
   operator +(Result other) {
     Result current = this;
     if (modifier != null) {
@@ -70,6 +81,7 @@ class Result implements Computable {
             current: current.dirtyParts));
   }
 
+  /// Subtracts two results.
   operator -(Result other) {
     Result current = this;
     if (modifier != null) {
@@ -86,12 +98,15 @@ class Result implements Computable {
             current: current.dirtyParts));
   }
 
+  /// Multiplies two results.
   operator *(Result other) =>
       Result(clean: approximate() * other.approximate());
 
+  /// Divides two results.
   operator /(Result other) =>
       Result(clean: approximate() / other.approximate());
 
+  /// Raises a result to a power.
   operator ^(Result other) {
     return Result(
         clean: approximate().pow(other.approximate().round().toInt()));
@@ -110,6 +125,7 @@ class Result implements Computable {
   @override
   Result compute(ComputeContext ctx) => this;
 
+  /// Approximate the result to a fraction.
   Rational approximate([int? digits]) {
     if (dirtyParts.isEmpty) {
       return clean;
@@ -123,6 +139,7 @@ class Result implements Computable {
                 Rational.parse(element.value.toString()));
   }
 
+  /// Is the result approximable?
   bool approximable() =>
       clean.hasFinitePrecision &&
       dirtyParts.entries.every((iv) => iv.key.approximable || iv.value == 0);

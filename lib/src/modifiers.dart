@@ -1,49 +1,52 @@
 import 'package:math_compute/src/computation.dart';
+import 'package:math_compute/src/utils/math.dart' as internal_math;
 import 'package:rational/rational.dart';
 
-Rational _factorial(Rational n) {
-  var prod = Rational.one;
-  for (var i = 1; i.toRational() <= n; i++) {
-    prod *= i.toRational();
-  }
-
-  return prod;
-}
-
+/// A modifier is a token put in front of a number, it is an operator with only
+/// one parameter.
 abstract class Modifier {
+  /// Creates the modifier.
   const Modifier();
 
+  /// Modifies the input.
   Result modify(Result input);
 
+  /// Modifies the input when it is an additive operation.
   Result modifyOnAdditiveOperation(Result current, Result other) => current;
 
+  /// The visual sign of the modifier.
   String get visualSign;
 
+  /// The token type required before this.
   Type? get requiredBefore => null;
 
+  /// The token type required after this.
   Type? get requiredAfter => null;
 }
 
-const factorial = FactorialModifier();
+/// A modifier for factorials
+const factorial = _FactorialModifier();
 
-class FactorialModifier extends Modifier {
-  const FactorialModifier();
+class _FactorialModifier extends Modifier {
+  const _FactorialModifier();
 
   @override
   Result modify(Result input) {
     return Result(
         dirtyParts: {},
-        clean: _factorial(Rational.parse(input.approximate().toString())));
+        clean: internal_math
+            .factorial(Rational.parse(input.approximate().toString())));
   }
 
   @override
   String get visualSign => '!';
 }
 
-const percentage = PercentageModifier();
+/// A modifier for percentages
+const percentage = _PercentageModifier();
 
-class PercentageModifier extends Modifier {
-  const PercentageModifier();
+class _PercentageModifier extends Modifier {
+  const _PercentageModifier();
 
   @override
   Result modify(Result input) {
