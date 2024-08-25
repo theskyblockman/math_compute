@@ -125,5 +125,5 @@ class DefaultComputeContext implements ComputeContext {
   final bool convertDegreesToRadians;
 
   /// Creates the context.
-  const DefaultComputeContext({this.convertDegreesToRadians = true});
+  const DefaultComputeContext({this.convertDegreesToRadians = false});
 }
