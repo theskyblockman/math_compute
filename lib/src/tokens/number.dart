@@ -1,9 +1,8 @@
 import 'package:math_compute/src/computation.dart';
+import 'package:math_compute/src/context.dart';
 import 'package:math_compute/src/errors.dart';
+import 'package:math_compute/src/lexing.dart';
 import 'package:rational/rational.dart';
-
-import '../context.dart';
-import '../lexing.dart';
 
 class NumberTokenType extends SimpleBanListValidator {
   const NumberTokenType()

@@ -1,8 +1,7 @@
+import 'package:math_compute/src/computation.dart';
 import 'package:math_compute/src/constants.dart';
-
-import '../computation.dart';
-import '../context.dart';
-import '../lexing.dart';
+import 'package:math_compute/src/context.dart';
+import 'package:math_compute/src/lexing.dart';
 
 class ConstantTokenType extends SimpleBanListValidator {
   const ConstantTokenType()

@@ -6,16 +6,15 @@ import 'package:math_compute/src/functions/logarithms.dart';
 import 'package:math_compute/src/functions/roots.dart';
 import 'package:math_compute/src/functions/triangulation.dart';
 import 'package:math_compute/src/lexing.dart';
+import 'package:math_compute/src/modifiers.dart';
+import 'package:math_compute/src/operators.dart';
 import 'package:math_compute/src/tokens/bracket.dart';
 import 'package:math_compute/src/tokens/comma.dart';
 import 'package:math_compute/src/tokens/constant.dart';
+import 'package:math_compute/src/tokens/function.dart';
+import 'package:math_compute/src/tokens/modifier.dart';
 import 'package:math_compute/src/tokens/number.dart';
 import 'package:math_compute/src/tokens/operator.dart';
-
-import 'modifiers.dart';
-import 'operators.dart';
-import 'tokens/function.dart';
-import 'tokens/modifier.dart';
 
 abstract class ComputeContext {
   /// A list of operators, defaults to basic operators (plus, minus, etc.)

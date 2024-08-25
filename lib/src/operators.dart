@@ -1,9 +1,8 @@
 import 'package:math_compute/src/computation.dart';
 import 'package:math_compute/src/context.dart';
 import 'package:math_compute/src/errors.dart';
+import 'package:math_compute/src/math_compute_base.dart';
 import 'package:rational/rational.dart';
-
-import 'math_compute_base.dart';
 
 abstract class Operator {
   Result compute(ComputeContext context, Result leftHand, Result rightHand);

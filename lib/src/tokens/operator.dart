@@ -1,6 +1,7 @@
 import 'package:math_compute/src/context.dart';
-
-import '../../advanced.dart';
+import 'package:math_compute/src/lexing.dart';
+import 'package:math_compute/src/math_compute_base.dart';
+import 'package:math_compute/src/operators.dart';
 
 class OperatorTokenType extends SimpleBanListValidator {
   const OperatorTokenType()

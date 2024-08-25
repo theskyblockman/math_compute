@@ -2,10 +2,9 @@ import 'dart:math' as math;
 
 import 'package:math_compute/src/computation.dart';
 import 'package:math_compute/src/context.dart';
+import 'package:math_compute/src/functions.dart';
 import 'package:math_compute/src/utils/math.dart' as internal_math;
 import 'package:rational/rational.dart';
-
-import '../functions.dart';
 
 double _convertDegreesToRadians(ComputeContext ctx, Result input) {
   if (!ctx.convertDegreesToRadians) return input.approximate().toDouble();

@@ -1,9 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:math_compute/src/computation.dart';
+import 'package:math_compute/src/math_compute_base.dart';
 import 'package:rational/rational.dart';
-
-import '../advanced.dart';
 
 class Constant {
   final Result value;

@@ -1,8 +1,7 @@
 import 'package:math_compute/src/context.dart';
 import 'package:math_compute/src/errors.dart';
+import 'package:math_compute/src/functions.dart';
 import 'package:math_compute/src/lexing.dart';
-
-import '../functions.dart';
 
 class FunctionTokenType extends SimpleBanListValidator {
   const FunctionTokenType()
